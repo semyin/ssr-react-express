@@ -1,13 +1,14 @@
 import { ReactNode } from "react";
-import { Nav } from "./components/Nav";
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { Outlet } from "@tanstack/react-router";
 
-export function App(props: { children: ReactNode }) {
+export function App() {
 	return (
-		<div>
-			<aside>
-				<Nav />
-			</aside>
-			{props.children}
-		</div>
+		<>
+			<div className="app-container">
+				<Outlet />
+			</div>
+			<TanStackRouterDevtools />
+		</>
 	);
 }
