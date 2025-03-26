@@ -1,14 +1,14 @@
 /// <reference types="vite/client" />
 
-import express, { Request, Response } from "express";
+import express from "express";
 import httpDevServer from "vavite/http-dev-server";
 import viteDevServer from "vavite/vite-dev-server";
 import { ComponentType } from "react";
 import { renderToString } from "react-dom/server";
-import React, { StrictMode, Suspense } from "react";
+import { StrictMode } from "react";
+import { createStaticHandler, createStaticRouter, StaticRouterProvider } from "react-router";
+import { routes } from "./router";
 // import { App } from "./App";
-import { createMemoryHistory, RouterProvider } from "@tanstack/react-router";
-import { createRouter, router } from "./router";
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.get("*", (req, res) => render(req, res));
 
 type PageImporter = () => Promise<{ default: ComponentType }>;
 
-async function render(req: Request, res: Response) {
+async function render(req: express.Request, res: express.Response) {
     // console.log(req.url, req.originalUrl);
     
     // const Page = (await importer()).default;
@@ -46,29 +46,30 @@ async function render(req: Request, res: Response) {
         // preload links for assets needed for the rendered page
     }
 
-    // const router = createRouter();
+    let { query, dataRoutes } = createStaticHandler(routes);
 
-    const memoryHistory = createMemoryHistory({
-        initialEntries: [req.originalUrl]
-    })
+    // Create a standard web Request object from the Express request
+    const url = new URL(req.url || '', `http://${req.headers.host || 'localhost'}`);
+    const webRequest = new Request(url.href, {
+        method: req.method,
+        headers: req.headers as HeadersInit
+    });
 
-    router.update({
-        history: memoryHistory
-    })
+    let context = await query(webRequest);
 
-    await router.load()
+    // Check if context is a Response (indicates a redirect)
+    if (context instanceof Response) {
+        return res.redirect(context.headers.get('Location') || '/');
+    }
+
+    const router = createStaticRouter(dataRoutes, context);
 
     const routerHtml = renderToString(
         <StrictMode>
-            <Suspense fallback={null}>
-                <RouterProvider router={router} />
-            </Suspense>
+            <StaticRouterProvider router={router} context={context} />
         </StrictMode>
     )
-
-    console.log(routerHtml);
     
-
     let html = `<!DOCTYPE html><html lang="en">
 		<head>
 			<meta charset="UTF-8">
@@ -81,12 +82,9 @@ async function render(req: Request, res: Response) {
 		</body>
 	</html>`;
 
-    console.log(html);
-
     if (viteDevServer) {
         // This will inject the Vite client and React fast refresh in development
         html = await viteDevServer.transformIndexHtml(req.originalUrl, html);
-        console.log(html);
         
     }
 

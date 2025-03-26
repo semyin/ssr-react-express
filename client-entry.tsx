@@ -1,8 +1,8 @@
-import React from "react";
-import { createRoot, hydrateRoot } from "react-dom/client";
+import { hydrateRoot } from "react-dom/client";
 import { StrictMode, Suspense } from 'react'
-import { RouterProvider,createBrowserHistory } from "@tanstack/react-router";
-import { createRouter, router } from "./router";
+import { RouterProvider } from "react-router/dom";
+import { createBrowserRouter } from "react-router";
+import { routes } from "./router";
 
 async function render() {
 	// Tiny, crappy router
@@ -18,30 +18,27 @@ async function render() {
 
 	// const Page = (await importer()).default;
 
-	// const router = createRouter();
-
-	// const history = createBrowserHistory({
-	// 	window: window,
-	// });
-
-	// router.update({
-	// 	history,
-	// });
-
-	// await router.load();
-
 	const root = document.getElementById("root") as HTMLElement;
 
-	console.log(root.innerHTML);
-	
+	let router = createBrowserRouter(routes, {
+		// need to ensure this script runs AFTER <StaticRouterProvider> in
+		// entry.server.tsx so that window.__staticRouterHydrationData is available
+		hydrationData: window.__staticRouterHydrationData,
+	});
+
 	hydrateRoot(
 		root,
 		<StrictMode>
-			<Suspense fallback={null}>
-				<RouterProvider router={router} />
-			</Suspense>
+			<RouterProvider router={router} />
 		</StrictMode>
 	);
 }
 
 render();
+
+declare global {
+	interface Window {
+		__staticRouterHydrationData: any;
+	}
+}
+
