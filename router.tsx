@@ -1,34 +1,30 @@
 import Home from "./pages/Home";
-import { Outlet } from "react-router";
+import { DefaultLayout } from "./layouts/Default";
 import Foo from "./pages/Foo";
 import Bar from "./pages/Bar";
 
-
-function Root() {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
-}
-
-export const routes = [
+export const _routes = [
   {
     path: "/",
-    Component: Root,
     children: [
       {
         path: "",
-        Component: Home,
-      },
-      {
-        path: "foo",
-        Component: Foo,
-      },
-      {
-        path: "bar",
-        Component: Bar,
+        element: <DefaultLayout />,
+        children: [
+          {
+            path: "",
+            element: <Home />,
+          },
+          {
+            path: "foo",
+            element: <Foo />,
+          },
+          {
+            path: "bar",
+            element: <Bar />,
+          },
+        ]
       },
     ]
   }
-]
+];
