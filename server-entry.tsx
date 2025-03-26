@@ -5,14 +5,18 @@ import { Root } from "./_root";
 import { QueryProvider } from "./QueryProvider";
 import { getQueryClient } from "./queryClient";
 import { dehydrate } from '@tanstack/react-query';
+import { prefetchRegisteredQueries } from './queryRegistry';
+
+// 导入所有注册的查询
+import './queryRegistrations';
 
 // 
 export async function render(url: string) {
     // 
     const queryClient = getQueryClient();
     
-    // 
-    await prefetchQueries(url, queryClient);
+    // 使用注册表系统预取查询
+    await prefetchRegisteredQueries(url, queryClient);
     
     // 
     const dehydratedState = dehydrate(queryClient);
@@ -33,38 +37,4 @@ export async function render(url: string) {
         html,
         queryState: dehydratedState
     };
-}
-
-// 
-async function prefetchQueries(url: string, queryClient: any) {
-    // 
-    if (url === '/' || url === '') {
-        // 
-        await queryClient.prefetchQuery({
-            queryKey: ['api', 'message'],
-            queryFn: async () => {
-                // API 
-                // 
-                console.log(1);
-                
-                return { message: "Hello from the API!" };
-            }
-        });
-    } else if (url.includes('/foo')) {
-        // Foo 
-        await queryClient.prefetchQuery({
-            queryKey: ['foo', 'data'],
-            queryFn: async () => {
-                return { items: ["Foo Item 1", "Foo Item 2", "Foo Item 3"] };
-            }
-        });
-    } else if (url.includes('/bar')) {
-        // Bar 
-        await queryClient.prefetchQuery({
-            queryKey: ['bar', 'data'],
-            queryFn: async () => {
-                return { info: "Bar page data from server" };
-            }
-        });
-    }
 }
