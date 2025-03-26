@@ -39,7 +39,7 @@ app.get("*", async (req: Request, res: Response) => {
 
     // 将查询状态序列化并注入到页面中
     const queryStateScript = queryState 
-        ? `<script>window.__REACT_QUERY_STATE = ${JSON.stringify(queryState)};</script>` 
+        ? `<script>window.__REACT_QUERY_STATE__ = ${JSON.stringify(queryState)};</script>` 
         : '';
 
     let html = `<!DOCTYPE html><html lang="en">

@@ -8,7 +8,7 @@ function render() {
 
 	const root = document.getElementById("root") as HTMLElement;
 	// 从全局变量获取服务端传递的状态
-	const dehydratedState = window.__REACT_QUERY_STATE;
+	const dehydratedState = window.__REACT_QUERY_STATE__;
 
 	hydrateRoot(
 		root,
@@ -27,6 +27,6 @@ render();
 declare global {
 	interface Window {
 		__staticRouterHydrationData: any;
-		__REACT_QUERY_STATE: any; // 添加 React Query 状态类型声明
+		__REACT_QUERY_STATE__: any; // 添加 React Query 状态类型声明
 	}
 }
