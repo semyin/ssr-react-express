@@ -34,7 +34,13 @@ app.get("*", async (req: Request, res: Response) => {
         // preload links for assets needed for the rendered page
     }
 
-    const routerHtml = render(req.url);
+    // 使用异步渲染函数，获取 HTML 和查询状态
+    const { html: routerHtml, queryState } = await render(req.url);
+
+    // 将查询状态序列化并注入到页面中
+    const queryStateScript = queryState 
+        ? `<script>window.__REACT_QUERY_STATE = ${JSON.stringify(queryState)};</script>` 
+        : '';
 
     let html = `<!DOCTYPE html><html lang="en">
 		<head>
@@ -44,6 +50,7 @@ app.get("*", async (req: Request, res: Response) => {
 		</head>
 		<body>
 			<div id="root">${routerHtml}</div>
+			${queryStateScript}
 			<script type="module" src="${clientEntryPath}"></script>
 		</body>
 	</html>`;
