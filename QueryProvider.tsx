@@ -1,4 +1,4 @@
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider, HydrationBoundary } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { getQueryClient } from './queryClient';
 
@@ -12,15 +12,11 @@ export function QueryProvider({ children, dehydratedState }: QueryProviderProps)
   // 获取查询客户端实例
   const queryClient = getQueryClient();
 
-  // 如果存在反序列化状态，则恢复客户端状态
-  if (dehydratedState && typeof window !== 'undefined') {
-    // 在客户端，我们使用预先获取的数据来初始化缓存
-    queryClient.setQueryData(['dehydratedState'], dehydratedState);
-  }
-
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <HydrationBoundary state={dehydratedState}>
+        {children}
+      </HydrationBoundary>
     </QueryClientProvider>
   );
 }

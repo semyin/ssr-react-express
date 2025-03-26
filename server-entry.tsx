@@ -20,7 +20,7 @@ export async function render(url: string) {
     // HTML
     const html = renderToString(
         <StrictMode>
-            <QueryProvider>
+            <QueryProvider dehydratedState={dehydratedState}>
                 <StaticRouter location={url}>
                     <Root />
                 </StaticRouter>
