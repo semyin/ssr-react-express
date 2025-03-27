@@ -4,7 +4,7 @@ import express from "express";
 import type { Request, Response } from "express";
 import httpDevServer from "vavite/http-dev-server";
 import viteDevServer from "vavite/vite-dev-server";
-import { render } from "./server-entry";
+import { render } from "#/renderer/server-entry";
 
 const app = express();
 
@@ -22,13 +22,13 @@ app.get("*", async (req: Request, res: Response) => {
     let clientEntryPath: string;
     if (viteDevServer) {
         // In development, we can simply refer to the source file name
-        clientEntryPath = "/client-entry.tsx";
+        clientEntryPath = "../renderer/client-entry.tsx";
     } else {
         // In production we'll figure out the path to the client entry file using the manifest
         // @ts-ignore: This only exists after the client build is complete
         const manifest = (await import("./dist/client/.vite/manifest.json"))
             .default;
-        clientEntryPath = manifest["client-entry.tsx"].file;
+        clientEntryPath = manifest["renderer/client-entry.tsx"].file;
 
         // In a real application we would also use the manifest to generate
         // preload links for assets needed for the rendered page

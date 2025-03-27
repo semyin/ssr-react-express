@@ -1,5 +1,5 @@
 import { useRoutes } from "react-router";
-import { _routes } from "./router";
+import { _routes } from "#/renderer/router";
 
 export { Root };
 

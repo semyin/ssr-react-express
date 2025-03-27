@@ -2,7 +2,7 @@ import { hydrateRoot } from "react-dom/client";
 import { StrictMode } from 'react'
 import { BrowserRouter } from "react-router";
 import { Root } from "./_root";
-import { QueryProvider } from "./QueryProvider";
+import { QueryProvider } from "#/query/QueryProvider";
 
 function render() {
 

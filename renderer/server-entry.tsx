@@ -2,13 +2,13 @@ import { renderToString } from "react-dom/server";
 import { StrictMode } from "react";
 import { StaticRouter } from "react-router";
 import { Root } from "./_root";
-import { QueryProvider } from "./QueryProvider";
-import { getQueryClient } from "./queryClient";
+import { QueryProvider } from "#/query/QueryProvider";
+import { getQueryClient } from "#/query/queryClient";
 import { dehydrate } from '@tanstack/react-query';
-import { prefetchRegisteredQueries } from './queryRegistry';
+import { prefetchRegisteredQueries } from '#/query/queryRegistry';
 
 // 导入所有注册的查询
-import './queryRegistrations';
+import '#/query/queryRegistrations';
 
 // 
 export async function render(url: string) {

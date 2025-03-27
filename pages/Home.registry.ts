@@ -1,4 +1,4 @@
-import { registerQuery } from '../queryRegistry';
+import { registerQuery } from '#/query/queryRegistry';
 
 // 为Home页面注册查询
 registerQuery('/', {

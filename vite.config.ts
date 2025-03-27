@@ -1,8 +1,14 @@
 import { defineConfig } from "vite";
 import { vavite } from "vavite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
+	resolve: {
+		alias: {
+			"#": path.resolve(__dirname),
+		},
+	},
 	buildSteps: [
 		{
 			name: "client",
@@ -19,7 +25,7 @@ export default defineConfig({
 						},
 					},
 					rollupOptions: { 
-						input: "client-entry.tsx",
+						input: "./renderer/client-entry.tsx",
 						output: {
 							manualChunks: (id) => {
 								// 依赖库分包

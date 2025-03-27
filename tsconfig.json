@@ -8,6 +8,11 @@
 		"skipLibCheck": true,
 		"moduleResolution": "Bundler",
 		"customConditions": ["import"],
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		// alias use #
+		"baseUrl": ".",
+		"paths": {
+			"#/*": ["./*"],
+		}
 	}
 }
