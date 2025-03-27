@@ -1,7 +1,7 @@
 import { registerQuery } from '#/query/queryRegistry';
 
 // 为Home页面注册查询
-registerQuery('/', {
+registerQuery('/', () => ({
   queryKey: ['api', 'message'],
   queryFn: async () => {
     // 在服务端运行时
@@ -9,4 +9,4 @@ registerQuery('/', {
     console.log('[SSR] 预取Home页面数据');
     return { message: "Hello from the API!" };
   }
-});
+}));

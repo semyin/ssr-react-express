@@ -30,6 +30,11 @@ app.get("*", async (req: Request, res: Response) => {
             .default;
         clientEntryPath = manifest["renderer/client-entry.tsx"].file;
 
+        // Make sure the path is absolute by adding a leading slash if it doesn't exist
+        if (!clientEntryPath.startsWith('/')) {
+            clientEntryPath = `/${clientEntryPath}`;
+        }
+
         // In a real application we would also use the manifest to generate
         // preload links for assets needed for the rendered page
     }

@@ -4,6 +4,4 @@
 import '#/pages/Home.registry';
 import '#/pages/Foo.registry';
 import '#/pages/Bar.registry';
-
-// 可以根据需要添加更多的组件查询注册
-// import './components/SomeComponent.registry';
+import '#/pages/Baz.registry';
