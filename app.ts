@@ -22,7 +22,7 @@ app.get("*", async (req: Request, res: Response) => {
     let clientEntryPath: string;
     if (viteDevServer) {
         // In development, we can simply refer to the source file name
-        clientEntryPath = "../renderer/client-entry.tsx";
+        clientEntryPath = "/renderer/client-entry.tsx";
     } else {
         // In production we'll figure out the path to the client entry file using the manifest
         // @ts-ignore: This only exists after the client build is complete
